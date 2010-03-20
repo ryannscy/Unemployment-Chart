@@ -1,0 +1,112 @@
+%
+% direction.tex
+%
+\section{Chart::Direction}
+
+\name{Chart::Direction}
+\file{Direction.pm}
+\requires{Chart::Base, GD, Carp, FileHandle}
+\begin{Description} 
+\class{Direction} is a \fett{subclass} of Chart::Base.\\
+The class Direction creates a diagram for polar coordinates.\\
+Direction plots data, which is specified by angle (eg. wind direction) and value (eg. wind strength).\\
+The first dataset to add is always a set of angels in degress. The second set is a set of values. The right adding of following datasets depends on the option 'pairs'.\\
+Direction will draw a point chart if no value ist set to the option 'point'. You can also get a lines chart by turning the option 'point' to 'false' and the option 'line' to 'true'. If you want a linespoint chart, then 'point' and 'line' has to be 'true'. Additionally chart plots arrows from the center to the point or to the end of the line, if the option 'arrow' is set to 'true'.
+\end{Description}
+
+\parindent 0pt{\large Example:}
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width = 8cm, height =8cm]{direction.png}
+	\end{center}
+	\caption{Direction chart}
+	\label{fig:direction}
+\end{figure}
+\begin{verbatim}
+use Chart::Direction;
+$g = Chart::Direction->new(500,500);
+
+$g->add_dataset( 0, 100, 50, 200, 280, 310);
+$g->add_dataset(30,  40, 20,  35,  45,  20);
+
+$g->add_dataset(10, 110, 60, 210, 290, 320);
+$g->add_dataset(30,  40, 20,  35,  45,  20);
+
+$g->add_dataset(20, 120, 70, 220, 300, 330);
+$g->add_dataset(30,  40, 20,  35,  45,  20);
+
+%hash = ( 'title' => 'Direction Demo',
+          'angle_interval' => 45,
+          'precision' => 0,
+          'arrow' => 'true',
+          'point' => 'false',
+          'include_zero' => 'true',
+          'pairs' => 'true',
+          'legend' => 'none',
+          'grey_background' => 'false');
+      
+$g->set(%hash);
+$g->png("Grafiken/vector.png");
+\end{verbatim}
+
+
+\begin{Constructor} 
+An instance of a direction chart object can be created with the constructor new():\\
+\fett{\$obj = Chart::Direction->new();}\\
+\fett{\$obj = Chart::Direction->new(\parameter{width}, \parameter{height});}\\
+If \textit{new()} has no arguments, 
+the constructor returns an image with the size 300x400 pixels. 
+If new has two arguments \parameter{width} and \parameter{height}, 
+it returns an image with the desired size. \\ 
+\end{Constructor}
+
+\Methods
+All universally valid methods, see page \pageref{methods}: Chart::Base.
+
+\Attributes
+All universally valid options, see page \pageref{options}.
+Additional, you can have effects on the axes, like 'custom\_x\_ticks', 'x\_ticks' and so on. 
+Also available, these special options:
+\begin{description}
+\item['point'] Indicates to draw points, 
+               representing the data values. 
+               'true' or 'false' possible, per default 'true'.
+
+\item['line'] Connects the points with lines if set to 'true'. 
+              Defaults to 'false'.
+
+\item['arrow'] Draws an arrow from the center of the chart to the point, 
+               if set to 'true', per default 'false'.
+
+\item['pairs'] This option tells Chart how to handle more datasets. 
+               If 'pairs' is set to 'true', 
+               Chart uses the first dataset as a set of degrees and 
+               the second dataset as a set of values. 
+               Then, the third set is a set of degrees und the fourth a set of values \dots. \\
+               If 'pairs' is set to 'false', 
+               Chart uses the first dataset as a set of angels 
+               and all following datasets as sets of values. \\
+               Defaults to 'false'.
+               
+\item['angle\_interval'] This option tells Chart, how many angle lines should be drawn. 
+                         It is the difference between two angle lines. 
+                         The default value is 30, which means 
+                         that a line will be drawn every 30 degrees. 
+                         There are not all values allowed. 
+                         Valid Values are: 0, 5, 10, 15, 20, 30, 45 and 90. 
+                         If you choose 0, Chart will draw no line.
+                         
+\item['pt\_size']Sets the radius of the points in pixels. Default is 18.
+
+\item['brush\_size']Sets the width of the lines in pixels. Default is 6.
+
+\item['min\_circles'] Sets the minimum number of circles to draw when generating a scale. 
+                      Default is 4, the minimum is 2.
+
+\item['max\_circles'] Sets the maximum number of circles to draw when generating a scale. 
+                      Default is 100. 
+                      This limit is used to avoid plotting an unreasonable large number of ticks 
+                      if non-round values are used for the min\_val and max\_val.\\
+                      The value for 'max\_circles' should be at least 5 times 
+                      larger than 'min\_circles'.
+\end{description}

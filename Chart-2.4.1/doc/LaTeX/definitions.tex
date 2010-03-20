@@ -1,0 +1,107 @@
+%
+% definitions.tex
+% ---------------
+
+% LENGTH
+\newlength{\parabstand}
+\setlength{\parabstand}{2ex plus1ex minus1ex}
+
+\newlength{\itemabstand}
+\setlength{\itemabstand}{1ex plus1ex minus1ex}
+
+% Commands
+
+\newcommand{\syn}[1]{
+                      {\it\large #1}
+                     } %Ende synopsis
+\newcommand{\fett}[1]{
+                       {\bf #1} 
+                     }% Ende Hervorheben
+\newcommand{\unl}[1] {
+                      {\underline #1}
+                     }%für implemet. und beschrei.
+\newcommand{\kursiv}[1]{
+                     {\it #1}
+                     }
+\newcommand{\herv}[1]{
+                     {\underline{\bf\large #1}}
+                     }
+
+%-------------- command class -------------------------
+\newcommand{\class}[1]{\textsc{\large #1}\index{Class!#1}}
+%-------------- command module -------------------------
+\newcommand{\module}[1]{\textsf{#1}}
+%-------------- command parameter -------------------------
+\newcommand{\parameter}[1]{\textit{#1}}
+
+%-------------- command name -------------------------
+\newcommand{\name}[1]{
+   \parbox{15ex}{\underline{\bf\large Name:}} #1\index{#1}\\[\itemabstand]}
+
+%-------------- command file -------------------------
+\newcommand{\file}[1]{
+   \parbox{15ex}{\underline{\bf\large File:}} #1\\[\itemabstand]}
+
+%-------------- command requires -------------------------
+\newcommand{\requires}[1]{
+   \parbox{15ex}{\underline{\bf\large Requires:}} #1\\[\itemabstand]}
+      
+%-------------- command method -------------------------
+\newcommand{\method}[1]{
+      \parindent 0pt \textbf{#1}}
+           
+%-------------- command methodexplanation -------------------------
+\newcommand{\methodexplanation}[1]{
+      \hfill\parbox{0.9\textwidth}{\small\parindent 0pt #1}}
+
+
+%-------------- command example -------------------------
+\newcommand{\example}[1]{
+      \parindent 0pt \mbox{\textbf{\footnotesize #1}}}   
+
+%-------------- command Methods -------------------------
+\newcommand{\Methods}
+     {\parindent 0pt\underline{\bf\large Methods:}\\}
+     
+%-------------- command Attributes -------------------------
+\newcommand{\Attributes}
+     {\parindent 0pt\underline{\bf\large Attributes/Options:}\\}
+     
+
+%% Environment definitons
+%  Environment Description
+\newsavebox{\descriptionsavedbox}
+\newenvironment{Description}
+{\begin{lrbox}{\descriptionsavedbox}
+ \begin{minipage}[t]{0.9\textwidth}
+}%
+{\vspace{\parabstand}
+ \end{minipage}\end{lrbox}
+ \parindent 0pt\underline{\bf\large Description:}
+ \mbox{\usebox{\descriptionsavedbox}}
+}% end Description
+
+
+%  Environment Constructor
+\newsavebox{\constructorsavedbox}
+\newenvironment{Constructor}
+{\begin{lrbox}{\constructorsavedbox}
+ \begin{minipage}[t]{0.9\textwidth}
+}%
+{\vspace{\parabstand}
+ \end{minipage}\end{lrbox}
+ \parindent 0pt\underline{\bf\large Constructor:}
+ \mbox{\usebox{\constructorsavedbox}}
+}% end Constructor
+
+%  Environment Example
+\newsavebox{\examplesavedbox}
+\newenvironment{Example}
+{\begin{lrbox}{\examplesavedbox}
+ \begin{minipage}[t]{0.9\textwidth}
+}%
+{\vspace{\parabstand}
+ \end{minipage}\end{lrbox}
+ \parindent 0pt{\large Example:}
+ \mbox{\usebox{\examplesavedbox}}
+}% end Example

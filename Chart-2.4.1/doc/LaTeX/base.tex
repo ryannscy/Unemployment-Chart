@@ -1,0 +1,369 @@
+%
+% Base.tex
+%
+\section{Chart::Base}
+
+\name{Chart::Base} \index{Chart::Base}
+\file{Base.pm}
+\requires{GD, Carp, FileHandle}
+\begin{Description}
+   \class{Base} is the \textbf{abstract superclass} of the modules: \module{Bars}, 
+   \module{Composite}, \module{Direction}, \module{ErrorBars}, 
+   \module{HorizontalBars}, 
+   \module{Lines}, \module{LinesPoints}, \module{Mountain}, 
+   \module{Pareto}, \module{Pie}, \module{Points}, \module{Split}, \module{StackedBars}.
+   \index{Base} \index{Bars} \index{Composite} \index{Direction} \index{ErrorBars} 
+   \index{HorizontalBars} \index{Lines} \index{LinesPoints} \index{Mountain} \index{Pareto} 
+   \index{Pie} \index{Points} \index{Split} \index{StackedBars}
+
+   The class \class{Base} provides all public methods and most of the attributs of a chart object.
+\end{Description}
+
+
+\begin{Constructor}
+An instance of a chart object can be created with the constructor new(): \index{new()}
+\begin{quote}
+\parindent 0pt
+\fett{\$obj = Chart::\textit{Type}->new();}
+
+\fett{\$obj = Chart::\textit{Type}->new(\parameter{width}, \parameter{height});}
+\end{quote}
+\textit{Type} means the type of chart it returns, i.e. \module{Chart::Bars} 
+returns a chart with bars.
+
+If \textit{new()} has no arguments, 
+the constructor returns an object with the size 300x400 pixels. 
+If \textit{new()} has two arguments \parameter{width} and \parameter{height}, 
+it returns a chart object of the desired size. 
+\end{Constructor}
+
+\Methods\parindent 0pt
+\label{methods}
+\method{\$obj->add\_dataset(@array);}\\
+\method{\$obj->add\_dataset($\backslash$@array\_ref);}\\
+\index{\$obj->add\_datasetadd\_dataset}
+\methodexplanation{Adds a dataset to the object. 
+The parameter is an array or a reference to an array. 
+Generally, the first added array is interpreted as being the x-tick labels. 
+The following arrays include the data points. 
+For example if the first call is 
+\example{\$obj->add\_dataset('Harry', 'Sally');}  
+and the second call is
+\example{\$obj->add\_dataset(5, 8);}
+then chart will draw a picture with two bars and label them with Harry and Sally.\\[\itemabstand]
+Some modules will handle that a little bit different. 
+Have a look at the respective descriptions of the specific modules to get more information.
+There are also differences if you want to use the \fett{xy\_plot} option, to create a xy-graph.}
+
+\method{\$obj->add\_pt(@array);}\\
+\method{\$obj->add\_pt($\backslash$@array\_ref);}\\
+\index{\$obj->add\_pt(@array)}
+\methodexplanation{This is another method to add data to a chart object. 
+An argument can be an array or a reference to an array. 
+If you use this method, chart wants the complete data of one data point.\\
+For example\\
+\example{\$obj->add\_pt('Harry', 5);}\\
+\example{\$obj->add\_pt('Sally', 8);}\\
+would create the same graph as the example for \method{add\_dataset} above.}
+
+\method{\$obj->add\_datafile( "file", \kursiv{type} );}\\
+\method{\$obj->add\_datafile( \$filehandle, \kursiv{type} );}\\
+\index{\$obj->add\_datafile}
+\methodexplanation{This method adds the contents of a complete data file to the chart object.\\
+\kursiv{Type} can be '\kursiv{set}' or '\kursiv{pt}'. 
+If the parameter is '\kursiv{set}' then one line in the data file has to be a complete data set. 
+The values of the set has to be separated by whitespaces. 
+For Example, the file contents has to looks like
+\begin{quote}
+\texttt{Harry  Sally}\\
+\texttt{3      8}\\
+\texttt{2      1}\\
+\end{quote}
+
+If the parameter is '\parameter{pt}' the lines of the file 
+        have to look like the parameter arrays of the \method{add\_pt} method. 
+ Which means, the line includes all values of one data point, also separated by whitespaces. 
+For Example:
+\begin{quote}
+\small
+\texttt{Harry 3 2}\\
+\texttt{Sally 8 1}\\
+\end{quote}
+}
+
+
+\method{\$obj->get\_data();}\\
+\index{\$obj->get\_data}
+\methodexplanation{If you want a copy of the data that has been added so far, 
+      make a call to the \method{get\_data} method like \\
+      \example{\$dataref = \$obj->get\_data();}\\[\itemabstand]
+      It returns a reference to an array of references to datasets. 
+       For Example, you can get the x-tick labels by:\\ 
+      \example{@x\_labels = @\{\$dataref->[0]\};}
+}
+
+ 
+\method{\$obj->clear\_data();} \\ 
+\index{\$obj->clear\_data}
+\methodexplanation{This is the method to remove all data that may have been entered till now.}
+
+\method{\$obj->set( \kursiv{attribut 1} => \kursiv{value 1}, \ldots ,\mbox{\kursiv{attribute n} => \kursiv{value n}} );}\\
+\method{\$obj->set( \%hash );}\\
+\method{\$obj->set( \kursiv{attribut 1}, \kursiv{value 1}, \ldots ,\mbox{\kursiv{attribute n}, \kursiv{value n}} );}\\
+\method{\$obj->set( @array );}\\
+\index{\$obj->set}
+\methodexplanation{Use this method to change the attributes of the chart object. 
+   Set looks for a hash of keys and values or an array of keys and values.\\
+     For Example 
+        \example{\$obj->set( 'title' => 'The title of the image');}
+      would set the title. The same job would do:\\
+      \example{\%hash = ('title' => 'The title of the image');}\\ 
+       \example{\$obj->set( \%hash);}}
+
+\method{\$obj->png( "file" );} \\
+\method{\$obj->png( \$filehandle );} \\
+\method{\$obj->png( FILEHANDLE );} \\
+\method{\$obj->png( "file", $\backslash$@data );}\\
+\index{\$obj->png}
+\methodexplanation{
+This method creates the png file. 
+The file parameter can be the file name, a reference to a filehandle or a filehandle itself. 
+If the file doesn't exist, chart will create a file for you. 
+If there is already a file, chart will overwrite this file. In case of an error, 
+the file is not created.\\
+You can also add the data to the chart object in the png method. 
+The \parameter{@data} array should contain references to arrays of data, 
+with the first array reference pointing to an array with x-tick labels. 
+\parameter{@data} could look like
+\example{@data = (['Harry', 'Sally'], [5, 8], [50, 80]);}\\
+This would set up an graph with two datasets, and three data points in these sets.
+}
+
+\method{\$obj->jpeg( "file" );} \\
+\method{\$obj->jpeg( \$filehandle );} \\
+\method{\$obj->jpeg( FILEHANDLE );} \\
+\method{\$obj->jpeg( "file", $\backslash$@data );}\\
+\index{\$obj->jpeg}
+\methodexplanation{
+    These are the methods to create jpeg files. They work similar like the png() method.}
+    
+\method{\$obj->cgi\_png();} \\
+\method{\$obj->cgi\_jpeg();} \\
+\index{\$obj->cgi\_png}\index{\$obj->cgi\_jpeg}
+\methodexplanation{
+With the cgi methods you can create dynamic images for your web site. 
+The cgi methods will print the chart, along with the appropriate http header to stdout, 
+allowing you to call chart-generating scripts directly from your html pages 
+(ie. with a <img scr=image.pl>HTML tag).}
+
+\method{\$obj->imagemap\_dump();} \\ 
+\index{\$obj->imagemap\_dump}
+\methodexplanation{
+           Chart can also return the pixel position information 
+           so that you can create image maps from the files Chart generates. 
+           Simply set the 'imagemap' option to 'true' before you generate the file, 
+           then call the \method{imagemap\_dump} method to retrieve the information. 
+           A structure will be returned almost identical to the \parameter{@data} array 
+           described above to pass the data into Chart.
+
+           \example{\$imagemap\_data = \$obj->imagemap\_dump();}
+
+           Instead of single data values, references to arrays of pixel information is passed. 
+           For the classes \class{Bars}, \class{HorizontalBars}, 
+           \class{Pareto} and \class{StackedBars} charts, 
+           the arrays will contain two x-y pairs (specifying the upper left and the lower right corner of the bar).
+           Compare to: \\
+            \example{( \$x1, \$y1, \$x2, \$y2 ) = @\{ \$imagemap\_data->[\$dataset][\$datapoint] \};}\\[\itemabstand]
+ 
+           For the classes \class{Lines}, \class{Points}, 
+            \class{LinesPoints} and \class{Split}, the arrays will contain a single xy-pair 
+          (specifying the center of the point). 
+         Compare to:\\
+            \example{( \$x, \$y) = @\{ \$imagemap\_data->[\$dataset][\$datapoint] \};}\\[\itemabstand]
+
+           A few caveats apply here. First of all, Chart uses the GD-module by Lincoln Stein 
+         to draw lines, circles, strings, and so on. 
+GD treats the upper-left corner of the png/jpeg as the reference point, 
+therefore, positive y values are measured from the top of the png/jpeg, not from the bottom. 
+Second, these values will mostly contain long decimal values. 
+GD, of course, has to truncate these to single pixel values. 
+In a worst-case scenario, this will result in an error of one pixel on your imagemap. 
+If this is really an issue, your only option is to experiment with it, 
+or to contact Lincoln Stein and ask him. Third, 
+please remember that the 0th dataset will be empty, since that's the place for the data point labels.}
+
+   
+\label{options}
+\Attributes
+These are the options which have effects on all types of chart:
+\begin{description}
+\item ['transparent']Makes the background of the image transparent if set to 'true'. 
+                    Useful for making web page images. 
+                    It doesn't work for all browsers. 
+                    Defaults to false.
+
+\item ['png\_border']Sets the number of pixels 
+                     used as a border between the graph and the edges of the png/jpeg. 
+                     Defaults to 10.
+                     
+\item ['graph\_border']
+        Sets the number of pixels used as a border between the title/labels 
+        and the actual graph within the png/jpeg. Defaults to 10.
+
+\item['text\_space']
+       Sets the amount of space left on the sides of text, to make it more readable.  Defaults to 2.
+
+\item['title']Tells Chart what to use for the title of the graph.  
+      If empty, no title is drawn.  
+      '$\backslash$es' are treated as newline. 
+      Remember, if you want to use normal quotation marks instead of single quotation marks 
+      you have to quote "`$\backslash\backslash$n"'. Default is empty.
+
+\item['sub\_title']Writes a sub-title under the title in smaller letters.
+
+\item['x\_label']Tells Chart what to use for the x-axis label.  
+                 If empty, no label is drawn.  Default is empty.
+                 
+\item['y\_label', 'y\_label2']Tells Chart what kind of label should be used for the description
+          of the y axis on the lft or the right side accordingly.  
+          If empty, no label is drawn.  Default is empty.
+
+\item['legend']Specifies the placement of the legend.  
+             Valid values are 'left', 'right', 'top', 'bottom'.  
+             Setting this to 'none' tells chart not to draw a legend.  Default is 'right'.
+
+\item['legend\_labels']
+            Sets the values for the labels for the different datasets. 
+            Should be assigned a reference to an array of labels.  For example,\\
+            \example{@labels = ('foo', 'bar')};\\
+            \example{\$obj->set ('legend\_labels' => $\backslash$@labels);}\\
+            Default is empty, in which case 'Dataset 1', 'Dataset 2', etc.
+             are used as the labels.
+             
+\item['tick\_len']Sets the length of the x- and y-ticks in pixels.  Default is 4.
+
+\item['x\_ticks']Specifies how to draw the x-tick labels.  
+        Valid values are 'normal', 'staggered' (staggers the labels vertically), 
+        and 'vertical' (the labels are draw upwards).  Default is 'normal'.
+
+\item['y\_ticks']The number of ticks to plot on the y scale, 
+      including the end points. e.g. If the scale runs from 0 to 50,
+			with ticks every 10, y\_ticks will have the value of 6.
+
+\item['min\_y\_ticks']Sets the minimum number of y\_ticks to draw when generating a scale. 
+        Default is 6, the minimum is 2.
+        
+\item['max\_y\_ticks']Sets the maximum number of y\_ticks to draw when generating a scale. 
+       Default is 100. This limit is used to avoid plotting an unreasonably 
+       large number of ticks if non-round values are used for the min\_val and
+       max\_val.\\[\itemabstand]
+       The value for 'max\_y\_ticks' should be at least 5 times larger than 'min\_y\_ticks'.
+       
+\item['max\_x\_ticks', 'min\_x\_ticks'] Works similar as 'max\_y\_ticks' and 'min\_y\_ticks'. 
+      Of course, it works only for xy-plots! 
+
+\item['integer\_ticks\_only']Specifies how to draw the x- and y-ticks: 
+      as floating point ('false', '0') 
+      or as integer numbers ('true', 1). 
+      If you want integer ticks, it is maybe better to set the option 'precision' at zero. 
+      Default: 'false'
+
+\item['skip\_int\_ticks']If 'integer\_ticks\_only' was set to 'true' the labels and 
+          ticks at the y-axis will be drawn every nth tick. 
+          Of course in HorizontalBars it affects the x-axis. Default to 1, no skipping.
+
+\item['precision'] Sets the number of numerals after the decimal point. 
+             Affects in most cases the y-axis. 
+             But also the x-axis if 'xy\_plot' is set and the labels in a pie chart. Defaults to 3.
+
+\item['max\_val']Sets the maximum y-value on the graph, overriding the normal autoscaling.  
+            Does not work for a Split chart. Default is undef.
+
+\item['min\_val']Sets the minimum y-value on the graph, overriding the normal autoscaling.  
+           Does not work for a Split chart. Default is undef.\\
+\\
+Caution should be used when setting 'max\_val' and 'min\_val' to floating point or non-round numbers. This is because the scale must start \& end on a tick, ticks must have round-number intervals, and include round numbers.\\
+\\
+Example: Suppose your dataset has a range of 35-114 units, If you specify them as the 'min\_val' \& 'max\_val', The y\_axis will be plot with 80 ticks every 1 unit.. If no 'min\_val' \& 'max\_val', the system will autoscale the range to 30-120 with 10 ticks every 10 units.\\
+\\
+If the 'min\_val' \& 'max\_val' are specified to exesive precision, they may be overiden by the system, plotting a maximum 'max\_y\_ticks' ticks. 
+
+\item['include\_zero']If 'true', forces the y-axis to include zero if it is not in the 
+            dataset range. Default is 'false'.\\
+\\
+In general, it is better to use this, than to set the 'min\_val' if that is all you want to achieve.
+\item['skip\_x\_ticks']Sets the number of x-ticks and x-tick labels to skip.  (ie. if 'skip\_x\_ticks' was set to 4, Chart would draw every 4th x-tick and x-tick label).  Default is undef.
+
+\item['custom\_x\_ticks']This option allows you to specify exactly 
+            which x-ticks and x-tick labels should be drawn. 
+            It should be assigned a reference to an array of desired ticks.  
+            Just remember that I'm counting from the 0th element of the array.  
+            (e.g., if 'custom\_x\_ticks' is assigned [0,3,4], 
+            then the 0nd, 3rd, and 4th x-ticks will be displayed) 
+            It doesn't work for \class{Split}, \class{HorizontalBars} and \class{Pie}.
+            
+\item['f\_x\_tick'] Needs a reference to a function 
+           which uses the x-tick labels generated by the \parameter{@data->[0]} as the argument. 
+           The result of this function reformats the labels as a string. 
+           For instance\\
+           \example{\$obj -> set ('f\_x\_tick' => $\backslash$\&formatter;}\\
+           An example for the function formatter: x labels are seconds since an event. 
+           The referenced function can transform this seconds to hour, minutes and seconds.
+
+\item['f\_y\_tick']The same situation as for 'f\_x\_tick' but now used for y labels.
+
+\item['colors']This option lets you control the colors the chart will use.  
+              It takes a reference to a hash.  
+              The hash should contain keys mapped to references to arrays of rgb values.  
+              For instance,\\
+              \example{\$obj->set('colors' => {'background' => [255,255,255]});}\\
+              sets the background color to white (which is the default).  
+              Valid keys for this hash are
+              \begin{itemize}
+              \item 'background' (background color for the png)
+              \item 'title' (color of the title)
+              \item 'text' (all the text in the chart)
+              \item 'x\_label' (color of the x axis label)
+              \item 'y\_label' (color of the first y axis label)
+              \item 'y\_label2' (color of the second y axis label)
+              \item 'grid\_lines' (color of the grid lines)
+              \item 'x\_grid\_lines' (color of the x grid lines - for x axis ticks)
+              \item 'y\_grid\_lines' (color of the y grid lines - for to left y axis ticks)
+              \item 'y2\_grid\_lines' (color of the y2 grid lines - for right y axis ticks)
+              \item 'dataset0'..'dataset63' (the different datasets)
+              \item 'misc' (everything else, e.g. ticks, box around the legend)
+              \end{itemize}
+             NB. For composite charts, there is a limit of 8 datasets per component. 
+             The colors for 'dataset8' through 'dataset15' 
+             become the colors for 'dataset0' through 'dataset7' for the second component chart.
+
+\item['title\_font'] This option changes the font of the title. 
+               The key has to be a Gd font. e.g. GD::Font->Large 
+
+\item['label\_font'] This option changes the font of the labels. The key has to be a Gd font. 
+
+\item['legend\_font'] This option changes the font of the text of the legend. The key has to be a Gd font. 
+
+\item['tick\_label\_font'] This option changes the font of the ticks. The key has to be a Gd font. 
+
+\item['grey\_background']Puts a nice soft grey background on the actual data plot when set to 'true'.  Default is 'true'.
+
+\item['x\_grid\_lines']Draws grid lines matching up to x ticks if set to 'true'. Default is 'false'.
+
+\item['y\_grid\_lines']Draws grid lines matching up to y ticks if set to 'true'. Default is 'false'.
+
+\item['grid\_lines']Draws grid lines matching up to x and y ticks if set to 'true'. Default is 'false'. 
+
+\item['imagemap']Lets Chart know you're going to ask for information 
+        about the placement of the data for use in 
+         creating an image map from the png. This information can be retrieved using the imagemap\_dump() method.         NB. that the imagemap\_dump() method cannot be called until 
+         after the Chart has been generated (e.g. using the png() or cgi\_png() methods).
+
+\item['ylabel2']The label for the right y-axis (the second component chart).  Default is undef.
+
+\item['no\_cache']Adds Pragma: no-cache to the http header. 
+           Be careful with this one, as Netscape 4.5 is     unfriendly with POST using this method.
+
+\item['legend\_example\_size'] Sets the length of the example line in the legend. Defaults to 20.
+\end{description}
+

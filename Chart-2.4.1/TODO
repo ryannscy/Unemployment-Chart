@@ -1,0 +1,25 @@
+Short term:
+-----------
+- Composite:
+   When using bars in both, an option is necessary to define whether
+   to put the bars above each other or to put aside.
+   Add an option to start x-ticks at the left (i.e. 0 point) side and
+   end at the right side
+-  Adapt true/false also to proper Perl true/false definition
+   (i.e. false = undef || 0 || "0",
+         true  = def || 1 || "1")
+-  Reorganize the relationship between
+   autoscale, 
+   y_ticks, min_y_ticks, max_y_ticks, xy-plot, integer_ticks_only, skip_int_ticks,
+   min_val, max_val
+   and document it.
+   (At the moment the autoscale is used as the default)
+-  Include Skyplot (Direction->polar) into the distribution   
+
+Long term:
+----------
+- 3-D charts
+- include TrueType fonts as soon as GD supports it
+- include logarithmic x- and y-axis
+- Let plot arbitrary xy-functions in a defined area, like
+  y=sin(1/x)+2*x

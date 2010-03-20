@@ -1,0 +1,78 @@
+% Documentation.tex
+%
+\documentclass[11pt]{article}
+
+\usepackage{a4}     % DIN A4
+%\usepackage{german} % Deutsche Trennung
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{makeidx}
+\makeindex
+
+
+%\includeonly{definitions,base}
+%\includeonly{definitions,bars}
+%\includeonly{definitions,composite}
+%\includeonly{definitions,direction}
+%\includeonly{definitions,error}
+%\includeonly{definitions,hbars}
+%\includeonly{definitions,lines}
+%\includeonly{definitions,linespoints}
+%\includeonly{definitions,mountain}
+%\includeonly{definitions,pareto}
+%\includeonly{definitions,pie}
+%\includeonly{definitions,points}
+%\includeonly{definitions,split}
+%\includeonly{definitions,stacked}
+
+% Hyphenations
+\hyphenation{init dataref}
+
+
+\begin{document}
+
+\pagenumbering{Roman} 
+\title{Dokumentation of Perl Module \textbf{Chart}}
+
+%% Name der Autoren 
+%% Die Adressenangaben werden mit \thanks{} eingeschlossen
+%% Name des ersten Autors
+\author{Chart Group\thanks{Bundesamt für Kartographie und Geodäsie, 
+Fundamentalstation Wettzell, Sackenrieder Straße 25, 
+D-93444 Kötzting, E-mail: chart@wettzell.ifag.de}}
+
+\maketitle
+\begin{center}
+\Large Version 2.4
+\end{center}
+
+\clearpage
+\texttt{\ttfamily}
+\tableofcontents
+
+% Einleitung
+\pagenumbering{arabic}
+\include{definitions}
+\include{description}
+%\include{example}
+\include{base}
+\include{bars}
+\include{composite}
+\include{direction}
+\include{error}
+\include{hbars}
+\include{lines}
+\include{linespoints}
+\include{mountain}
+\include{pareto}
+\include{pie}
+\include{points}
+\include{split}
+\include{stacked}
+\listoffigures
+\printindex
+
+\end{document}

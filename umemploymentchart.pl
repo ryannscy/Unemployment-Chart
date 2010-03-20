@@ -1,3 +1,28 @@
+#!/usr/bin/perl 
+#===============================================================================
+#
+#         FILE:  umemploymentchart.pl
+#
+#        USAGE:  ./umemploymentchart.pl  
+#
+#  DESCRIPTION:  
+#
+#      OPTIONS:  ---
+# REQUIREMENTS:  ---
+#         BUGS:  ---
+#        NOTES:  ---
+#       AUTHOR:  Amiri Barksdale (), 
+#      COMPANY:  
+#      VERSION:  1.0
+#      CREATED:  03/18/2010 20:44:22
+#     REVISION:  ---
+#===============================================================================
+
+use strict;
+use warnings;
+
+
+#!/usr/bin/perl
 use strict;
 use warnings;
 use Chart::Clicker;
@@ -48,23 +73,3 @@ foreach my $data (@raw_data) {
 
 my $series1 = Chart::Clicker::Data::Series->new(
     keys => \@years,
-    values => \@rates,
-); 
-
-my $ds = Chart::Clicker::Data::DataSet->new(series=>[$series1]);
-
-$cc->add_to_datasets($ds);
-
-
-$cc->draw;
-
-$cc->write_output('chart.png');
-
-my $tt = Template->new;
-$tt->process('unemployment.tt2', {years =>\@array}, 'unemploymentchart.html') or  die $tt->error;
-
-
-
-}
-
-
